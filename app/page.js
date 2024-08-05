@@ -1,13 +1,15 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { firestore } from '@/firebase'
-import { Box, Modal, Typography, Stack, TextField, Button } from '@mui/material'
+import { Box, Modal, Typography, Stack, TextField, Button, IconButton } from '@mui/material'
 import { collection, deleteDoc, doc, getDocs, getDoc, query, setDoc } from 'firebase/firestore'
+import SearchIcon from '@mui/icons-material/Search';
 
 export default function Home() {
   const [inventory, setInventory] = useState([])
   const [open, setOpen] = useState(false)
   const [itemName, setItemName] = useState('')
+  const [searchTerm, setSearchTerm] = useState('');
 
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, 'inventory'))
@@ -58,6 +60,11 @@ export default function Home() {
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
+
+  const filteredInventory = inventory.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
 
   return (
     <Box
@@ -117,7 +124,7 @@ export default function Home() {
       <Box
         width="700px"
         height="115px"
-        bgcolor="#2db434"
+        bgcolor="#50C878"
         display="flex"
         flexDirection="column"
         justifyContent="flex-start"
@@ -131,17 +138,40 @@ export default function Home() {
 
       <Button
         variant="contained"
-        sx={{ backgroundColor: '#2db434', color: 'white' }}
+        sx={{ backgroundColor: '#50C878', color: 'white' }}
         onClick={handleOpen}
       >
         Add New Item
-      </Button>
+      </Button>            
+        
+      <Box
+        sx = {{
+          position: "relative", 
+          bottom: "150px",
+          left: "600px",
+          width: "200px"
+        }}
+
+      >
+
+          <TextField
+            variant = "outlined"
+            label = "Search"
+            onChange = {(e) => setSearchTerm(e.target.value)}
+
+            sx={{borderColor: "white"}}
+                
+          >
+            
+            </TextField> 
+    
+      </Box>
 
       <Stack
         width="1000px"
         spacing={2}
       >
-        {inventory.map(({ name, quantity }) => (
+        {filteredInventory.map(({ name, quantity }) => (
           <Box
             key={name}
             width="100%"
@@ -187,7 +217,7 @@ export default function Home() {
               <Button
                 variant="contained"
                 onClick={() => addItem(name)}
-                sx={{ backgroundColor: '#2db434', color: 'white', fontSize: "25px"}}
+                sx={{ backgroundColor: '#50C878	', color: 'white', fontSize: "25px"}}
               >
                 +
               </Button>
