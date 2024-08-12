@@ -122,8 +122,8 @@ export default function Home() {
       </Modal>
 
       <Box
-        width="700px"
-        height="115px"
+        width= {{xs:350, lg:700}} // so basically this is a responsive design, the width of the box will be 350px on small screens and 700px on large screens
+        height={{xs:60, lg:115}} // same as above
         bgcolor="#50C878"
         display="flex"
         flexDirection="column"
@@ -133,7 +133,8 @@ export default function Home() {
         style={{ padding: 0, border: 'none' }}
         alignItems="center"
       >
-        <Typography variant="h1" sx={{ color: "white", fontStyle: "normal" }}>Digital Pantry</Typography>
+       {/* The sx prop allows direct interaction with a component's CSS, while the Typography component defines the HTML tag (h1, h3) and adjusts its font size responsively based on tag choosen using xs and lg values. */}
+        <Typography sx={{typography:{lg:"h1", xs:"h3"}, color: "white", fontStyle: "normal" }}>Digital Pantry</Typography>
       </Box>
 
       <Button
@@ -147,9 +148,9 @@ export default function Home() {
       <Box
         sx = {{
           position: "relative", 
-          bottom: "150px",
-          left: "600px",
-          width: "200px"
+          bottom: {lg: "150px", xs: "0px"},
+          left: {lg: "600px", xs: "0px"},
+          width: {lg: "200px", xs: "250px"}
         }}
 
       >
@@ -168,14 +169,14 @@ export default function Home() {
       </Box>
 
       <Stack
-        width="1000px"
+        width={{xs:350, lg:1000}} //here
         spacing={2}
       >
         {filteredInventory.map(({ name, quantity }) => (
           <Box
             key={name}
             width="100%"
-            minHeight="100px"
+            minHeight="80px"
             display="flex"
             alignItems="center"
             justifyContent="space-between"
@@ -186,43 +187,71 @@ export default function Home() {
             sx={{ overflow: 'hidden' }}
           >
             <Typography
-              variant="h3"
               color="#333"
               textAlign="left"
-              sx={{ flexGrow: 1}}
+              sx={{typography:{lg:"h3", xs:"h4"},flexgeow:1}} //here
             >
               {name.charAt(0).toUpperCase() + name.slice(1)}
             </Typography>
 
             <Stack direction="row" spacing={2}>
-            <Button
-                variant="contained"
-                width = "50px"
-                height = "50px"
-                onClick={() => removeItem(name)}
-                sx={{ backgroundColor: '#ADD8E6', color: 'white', fontSize: "25px" }} 
-              >
-                -
-              </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => removeItem(name)}
+                  sx={{
+                    height: {
+                      xs: 50,
+                      lg: 70
+                    },
+                    width: {
+                      xs: 50,
+                      lg: 70
+                    }, //here
+                    backgroundColor: '#ADD8E6',
+                    color: 'white',
+                    fontSize: '25px'
+                  }}
+                >
+                  -
+                </Button>
 
-            <Typography
-              variant="h3"
-              color="#333"
-              textAlign="center"
-              sx={{ minWidth: '75px' }} 
-            >
-              {quantity}
-            </Typography>
+                <Typography
+                  color="#333"
+                  textAlign="center"
+                  sx={{
+                    minWidth: {
+                      sm: '40px',
+                      lg: '70px'
+                    },
+                    fontSize: {
+                      xs: '35px',
+                      lg: '50px'
+                    }
+                  }} //here
+                >
+                  {quantity}
+                </Typography>
 
-              <Button
-                variant="contained"
-                onClick={() => addItem(name)}
-                sx={{ backgroundColor: '#50C878	', color: 'white', fontSize: "25px"}}
-              >
-                +
-              </Button>
-
-            </Stack>
+                <Button
+                  variant="contained"
+                  onClick={() => addItem(name)}
+                  sx={{
+                    height: {
+                      xs: 50,
+                      lg: 70
+                    },
+                    width: {
+                      xs: 50,
+                      lg: 70
+                    },//here 
+                    backgroundColor: '#50C878',
+                    color: 'white',
+                    fontSize: '22px'
+                  }}
+                >
+                  +
+                </Button>
+              </Stack>
           </Box>
         ))}
       </Stack>
